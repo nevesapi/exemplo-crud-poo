@@ -2,6 +2,8 @@
 
   namespace ExemploCrud;
 
+  use InvalidArgumentException;
+
   final class Fabricante
   {
     private ?int $id;
@@ -12,5 +14,32 @@
       $this->setNome($nome);
       $this->setId($id);
       $this->validar();
+    }
+
+    private function validar(): void
+    {
+      if (empty($this->nome)) {
+        throw new InvalidArgumentException("O nome do fabricante é obrigatório!");
+      }
+    }
+
+    private function setId(?int $id): void
+    {
+      $this->id = $id;
+    }
+
+    private function setNome(string $nome): void
+    {
+      $this->nome = $nome;
+    }
+
+    public function getId(): ?int
+    {
+      return $this->id;
+    }
+
+    public function getNome(): string
+    {
+      return $this->nome;
     }
   }
