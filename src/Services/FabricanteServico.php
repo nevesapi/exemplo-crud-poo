@@ -3,7 +3,7 @@
 namespace ExemploCrud\Services;
 
 use Exception;
-use ExemploCrud\ConnectDB;
+use ExemploCrud\Database\ConnectDB;
 use PDO;
 use Throwable;
 
