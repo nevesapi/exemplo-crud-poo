@@ -2,9 +2,9 @@
 
 namespace ExemploCrud\Services;
 
-use Exception;
 use ExemploCrud\Database\ConnectDB;
 use ExemploCrud\Models\Fabricante;
+use Exception;
 use PDO;
 use Throwable;
 

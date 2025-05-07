@@ -1,6 +1,12 @@
 <?php
+require_once "../vendor/autoload.php";
+
+use ExemploCrud\Models\Fabricante;
+use ExemploCrud\Services\FabricanteServico;
+
+$fabricanteServico = new FabricanteServico();
+
 if (isset($_POST["inserir"])) {
-	require_once "../src/funcoes-fabricantes.php";
 
 	$nome = filter_input(
 		INPUT_POST,
@@ -8,7 +14,8 @@ if (isset($_POST["inserir"])) {
 		FILTER_SANITIZE_FULL_SPECIAL_CHARS
 	);
 
-	inserirFabricante($connect, $nome);
+	$fabricante = new Fabricante($nome);
+	$fabricanteServico->inserir($fabricante);
 
 	header("location:visualizar.php");
 	exit;
