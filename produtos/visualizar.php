@@ -1,8 +1,13 @@
 <?php
-require_once "../src/funcoes-produtos.php";
+// require_once "../src/funcoes-produtos.php";
+
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
 require_once "../src/funcoes-utilitarias.php";
 
-$listaDeProdutos = listarProdutos($connect);
+$produtoServico = new ProdutoServico();
+$listaDeProdutos = $produtoServico->listarTodos();
 ?>
 
 <!-- <pre><?= var_dump($listaDeProdutos) ?></pre> -->
