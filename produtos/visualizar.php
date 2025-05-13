@@ -10,7 +10,6 @@ $produtoServico = new ProdutoServico();
 $listaDeProdutos = $produtoServico->listarTodos();
 ?>
 
-<!-- <pre><?= var_dump($listaDeProdutos) ?></pre> -->
 <!DOCTYPE html>
 <html lang="pt-br">
 

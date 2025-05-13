@@ -4,6 +4,7 @@ namespace ExemploCrud\Services;
 
 use Exception;
 use ExemploCrud\Database\ConnectDB;
+use ExemploCrud\Models\Produto;
 use PDO;
 use Throwable;
 
@@ -15,7 +16,8 @@ final class ProdutoServico
   {
     $this->connect = ConnectDB::getConnect();
   }
-  function listarTodos(): array
+
+  public function listarTodos(): array
   {
     // $sql = "SELECT * FROM produtos";
     $sql = "SELECT 
@@ -37,4 +39,25 @@ final class ProdutoServico
       throw new Exception("Erro ao listar produtos: " . $err->getMessage());
     }
   }
+
+  public function inserir(Produto $produto): void
+  {
+    $sql = "INSERT INTO produtos(nome, preco, quantidade, fabricante_id, descricao) 
+    VALUES(:nome, :preco, :quantidade, :fabricanteId, :descricao)";
+
+    try {
+      $query = $this->connect->prepare($sql);
+      $query->bindValue(":nome", $produto->getNome(), PDO::PARAM_STR);
+      $query->bindValue(":preco", $produto->getPreco(), PDO::PARAM_STR);
+      $query->bindValue(":quantidade", $produto->getQuantidade(), PDO::PARAM_INT);
+      $query->bindValue(":fabricanteId", $produto->getFabricanteId(), PDO::PARAM_INT);
+      $query->bindValue(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
+
+      $query->execute();
+    } catch (Throwable $erro) {
+      throw new Exception("Erro ao cadastrar produto: " . $erro->getMessage());
+    }
+  }
+
+  
 }
