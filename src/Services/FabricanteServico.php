@@ -41,4 +41,20 @@ final class FabricanteServico
       throw new Exception("Erro ao cadastrar fabricante: " . $erro->getMessage());
     }
   }
+
+  public function buscarPorId(int $id): ?array
+  {
+    $sql = "SELECT * FROM fabricantes WHERE id = :id";
+
+    try {
+
+      $query = $this->connect->prepare($sql);
+      $query->bindValue(":id", $id, PDO::PARAM_INT);
+      $query->execute();
+
+      return $query->fetch(PDO::FETCH_ASSOC);
+    } catch (Throwable $erro) {
+      throw new Exception("Erro ao carregar fabricante: " . $erro->getMessage());
+    }
+  }
 }
