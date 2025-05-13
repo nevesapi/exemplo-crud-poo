@@ -1,14 +1,21 @@
 <?php
 
-require_once "../src/funcoes-fabricantes.php";
+use ExemploCrud\Models\Fabricante;
+use ExemploCrud\Services\FabricanteServico;
+
+require_once "../vendor/autoload.php";
 
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
-$fabricante = carregarFabricante($connect, $id);
+
+$fabricanteServico = new FabricanteServico();
+$fabricanteDados = $fabricanteServico->buscarPorId($id);
 
 if (isset($_POST["atualizar"])) {
 	$nome  = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
 
-	atualizaFabricante($connect, $nome, $id);
+	$fabricante = new Fabricante($nome, $id);
+
+	$fabricanteServico->atualizar($fabricante);
 	header("location:visualizar.php");
 	exit;
 }
@@ -30,11 +37,11 @@ if (isset($_POST["atualizar"])) {
 		<hr>
 
 		<form action="" method="post" class="w-25">
-			<input type="hidden" name="id" value="<?= $fabricante["id"] ?>">
+			<input type="hidden" name="id" value="<?= $fabricanteDados["id"] ?>">
 
 			<div class="mb-3">
 				<label for="nome" class="form-label">Nome:</label>
-				<input class="form-control" required type="text" name="nome" id="nome" value="<?= $fabricante["nome"] ?>">
+				<input class="form-control" required type="text" name="nome" id="nome" value="<?= $fabricanteDados["nome"] ?>">
 			</div>
 
 			<button class="btn btn-warning" type="submit" name="atualizar">

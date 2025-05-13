@@ -52,9 +52,25 @@ final class FabricanteServico
       $query->bindValue(":id", $id, PDO::PARAM_INT);
       $query->execute();
 
-      return $query->fetch(PDO::FETCH_ASSOC);
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+
+      return $result ? $result : null;
     } catch (Throwable $erro) {
       throw new Exception("Erro ao carregar fabricante: " . $erro->getMessage());
+    }
+  }
+
+  public function atualizar(Fabricante $fabricante): void
+  {
+    $sql = "UPDATE fabricantes SET nome = :nome WHERE id = :id";
+    try {
+      $query = $this->connect->prepare($sql);
+      $query->bindValue(":nome", $fabricante->getNome(), PDO::PARAM_STR);
+      $query->bindValue(":id", $fabricante->getId(), PDO::PARAM_INT);
+
+      $query->execute();
+    } catch (Throwable $erro) {
+      throw new Exception("Erro ao atualizar nome do fabricante: " . $erro->getMessage());
     }
   }
 }
