@@ -1,6 +1,4 @@
 <?php
-// require_once "../src/funcoes-produtos.php";
-// require_once "../src/funcoes-fabricantes.php";
 
 use ExemploCrud\Models\Produto;
 use ExemploCrud\Services\FabricanteServico;

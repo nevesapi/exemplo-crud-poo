@@ -1,3 +1,18 @@
+<?php
+
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
+$produtoServico = new ProdutoServico();
+
+$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+
+if (isset($_GET['confirmar-exclusao'])) {
+	$produtoServico->excluir($id);
+	header("location:visualizar.php");
+	exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -15,14 +30,11 @@
 
 		<div class="alert alert-danger w-50">
 			<p> Deseja realmente excluir o produto?</p>
-
 			<a href="visualizar.php" class="btn btn-secondary">Não</a>
-			<a href="" class="btn btn-danger">Sim</a>
-
+			<a href="?id=<?= $id ?>&confirmar-exclusao" class="btn btn-danger">Sim</a>
 		</div>
 
 		<hr>
-
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

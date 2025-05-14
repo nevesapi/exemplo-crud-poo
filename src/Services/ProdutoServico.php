@@ -75,7 +75,7 @@ final class ProdutoServico
     }
   }
 
-  function atualizarProduto(Produto $produto): void
+  public function atualizarProduto(Produto $produto): void
   {
 
     $sql = "UPDATE produtos SET nome = :nome, preco = :preco, quantidade = :quantidade, fabricante_id = :fabricante_id, descricao = :descricao WHERE id = :id";
@@ -91,6 +91,19 @@ final class ProdutoServico
       $query->execute();
     } catch (Throwable $erro) {
       throw new Exception("Erro ao atualizar produto: " . $erro->getMessage());
+    }
+  }
+
+  public function excluir(int $id): void
+  {
+    $sql = "DELETE FROM produtos WHERE id = :id";
+
+    try {
+      $consulta = $this->connect->prepare($sql);
+      $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+      $consulta->execute();
+    } catch (Throwable $erro) {
+      throw new Exception("Erro ao excluir produto: " . $erro->getMessage());
     }
   }
 }
