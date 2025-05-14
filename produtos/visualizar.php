@@ -38,7 +38,8 @@ $listaDeProdutos = $produtoServico->listarTodos();
 						<p><b><?= formatarPreco($produto["preco"]) ?></b> </p>
 						<p><b>Quantidade:</b> <?= $produto["quantidade"] ?></p>
 						<p><b>Total:</b> <?= $calcularTotal($produto["preco"], $produto["quantidade"]) ?></p>
-						<a class="btn btn-primary btn-sm" href="atualizar.php?id=<?= $produto['id'] ?>">Editar</a>
+						<a class="btn btn-warning" href="atualizar.php?id=<?= $produto["id"] ?>">Editar</a>
+						<a class="btn btn-danger" href="excluir.php?id=<?= $produto["id"] ?>">Excluir</a>
 					</article>
 				</div>
 			<?php } ?>

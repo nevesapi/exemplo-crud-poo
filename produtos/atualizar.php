@@ -1,10 +1,34 @@
 <?php
-require_once "../src/funcoes-produtos.php";
-$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
-$produto = carregarUmProduto($connect, $id);
-?>
+// require_once "../src/funcoes-produtos.php";
+// require_once "../src/funcoes-fabricantes.php";
 
-<!-- <pre><?= var_dump($produto) ?></pre> -->
+use ExemploCrud\Models\Produto;
+use ExemploCrud\Services\FabricanteServico;
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
+
+$produtoServico = new ProdutoServico();
+$fabricanteServico = new FabricanteServico();
+$listaDeFabricantes = $fabricanteServico->listarTodos();
+
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+// $produto = listarUmProduto($conexao, $id);
+$produto = $produtoServico->buscarPorId($id);
+
+if (isset($_POST['atualizar'])) {
+	$nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$preco = filter_input(INPUT_POST, "preco", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+	$quantidade = filter_input(INPUT_POST, "quantidade", FILTER_SANITIZE_NUMBER_INT);
+	$fabricanteId = filter_input(INPUT_POST, "fabricante", FILTER_SANITIZE_NUMBER_INT);
+	$descricao = filter_input(INPUT_POST, "descricao", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+	$proutoAtualizado = new Produto($nome, $preco, $quantidade, $fabricanteId, $id, $descricao);
+	$produtoServico->atualizarProduto($proutoAtualizado);
+	header("location:visualizar.php");
+	exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -21,41 +45,55 @@ $produto = carregarUmProduto($connect, $id);
 		<hr>
 
 		<form action="" method="post" class="w-50">
-
+			<input type="hidden" name="id" value="<?= $produto['id'] ?>">
 			<div class="mb-3">
 				<label class="form-label" for="nome">Nome:</label>
-				<input class="form-control" type="text" name="nome" id="nome" required value="<?= $produto["nome"] ?>">
+				<input value="<?= $produto['nome'] ?>"
+					class="form-control" type="text" name="nome" id="nome" required>
 			</div>
-
 			<div class="mb-3">
 				<label class="form-label" for="preco">Preço:</label>
-				<input class="form-control" type="number" min="10" max="10000" step="0.01" name="preco" id="preco" required value="<?= $produto["preco"] ?>">
+				<input value="<?= $produto['preco'] ?>"
+					class="form-control" type="number" min="10" max="10000" step="0.01" name="preco" id="preco" required>
 			</div>
-
 			<div class="mb-3">
 				<label class="form-label" for="quantidade">Quantidade:</label>
-				<input class="form-control" type="number" min="1" max="100" name="quantidade" id="quantidade" required value="<?= $produto["quantidade"] ?>">
+				<input value="<?= $produto['quantidade'] ?>"
+					class="form-control" type="number" min="1" max="100" name="quantidade" id="quantidade" required>
 			</div>
-
 			<div class="mb-3">
 				<label class="form-label" for="fabricante">Fabricante:</label>
-
 				<select class="form-select" name="fabricante" id="fabricante" required>
 					<option value=""></option>
-					<option value="">Fabricante 1...</option>
-					<option value="">Fabricante 2...</option>
-					<option value="">Fabricante 3...</option>
-				</select>
-			</div>
 
+
+					<!-- Algoritmo para seleção do fabricante do produto
+            que será editado 
+            
+            Se a FK da tabela produtos for igual a PK da tabela fabricantes,
+            ou seja, se o id do fabricante do produto for igual ao id
+            do fabricante, então coloque o atributo "selected" no <option>
+            correspondente.
+            -->
+					<?php foreach ($listaDeFabricantes as $fabricante): ?>
+						<option
+							<?php if ($produto['fabricante_id'] === $fabricante['id']) echo " selected " ?>
+							value="<?= $fabricante['id'] ?>">
+							<?= $fabricante['nome'] ?>
+						</option>
+					<?php endforeach; ?>
+
+				</select>
+
+			</div>
 			<div class="mb-3">
 				<label class="form-label" for="descricao">Descrição:</label> <br>
-				<textarea class="form-control" name="descricao" id="descricao" cols="30" rows="3"><?= $produto["descricao"] ?></textarea>
+				<textarea class="form-control" name="descricao" id="descricao" cols="30" rows="3"><?= $produto['descricao'] ?></textarea>
 			</div>
-
-			<button class="btn btn-warning w-100" type="submit" name="atualizar">Atualizar produto</button>
-
+			<button class="btn btn-warning" type="submit" name="atualizar">Atualizar produto</button>
 		</form>
+
+
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -59,5 +59,38 @@ final class ProdutoServico
     }
   }
 
-  
+  public function buscarPorId(int $id): array
+  {
+    $sql = "SELECT * FROM produtos WHERE id = :idProduto";
+
+    try {
+      $query = $this->connect->prepare($sql);
+      $query->bindValue(":idProduto", $id, PDO::PARAM_INT);
+
+      $query->execute();
+
+      return $query->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $erro) {
+      die("Erro ao cadastrar produto: " . $erro->getMessage());
+    }
+  }
+
+  function atualizarProduto(Produto $produto): void
+  {
+
+    $sql = "UPDATE produtos SET nome = :nome, preco = :preco, quantidade = :quantidade, fabricante_id = :fabricante_id, descricao = :descricao WHERE id = :id";
+
+    try {
+      $query = $this->connect->prepare($sql);
+      $query->bindValue(":nome", $produto->getNome(), PDO::PARAM_STR);
+      $query->bindValue(":preco", $produto->getPreco(), PDO::PARAM_STR);
+      $query->bindValue(":quantidade", $produto->getQuantidade(), PDO::PARAM_INT);
+      $query->bindValue(":fabricante_id", $produto->getFabricanteId(), PDO::PARAM_INT);
+      $query->bindValue(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
+      $query->bindValue(":id", $produto->getId(), PDO::PARAM_INT);
+      $query->execute();
+    } catch (Throwable $erro) {
+      throw new Exception("Erro ao atualizar produto: " . $erro->getMessage());
+    }
+  }
 }
