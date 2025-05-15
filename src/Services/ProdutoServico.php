@@ -19,7 +19,6 @@ final class ProdutoServico
 
   public function listarTodos(): array
   {
-    // $sql = "SELECT * FROM produtos";
     $sql = "SELECT 
     produtos.id, 
     produtos.nome AS produto, 

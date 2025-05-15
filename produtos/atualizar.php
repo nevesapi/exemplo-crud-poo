@@ -11,7 +11,6 @@ $fabricanteServico = new FabricanteServico();
 $listaDeFabricantes = $fabricanteServico->listarTodos();
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-// $produto = listarUmProduto($conexao, $id);
 $produto = $produtoServico->buscarPorId($id);
 
 if (isset($_POST['atualizar'])) {
