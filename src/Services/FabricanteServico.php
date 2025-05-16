@@ -5,6 +5,7 @@ namespace ExemploCrud\Services;
 use ExemploCrud\Database\ConnectDB;
 use ExemploCrud\Models\Fabricante;
 use Exception;
+use ExemploCrud\Utils\Utils;
 use PDO;
 use Throwable;
 
@@ -25,7 +26,8 @@ final class FabricanteServico
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (Throwable $erro) {
-      throw new Exception("Erro ao listar fabricantes: " . $erro->getMessage());
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao listar fabricantes.");
     }
   }
 
