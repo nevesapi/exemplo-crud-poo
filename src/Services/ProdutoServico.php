@@ -5,6 +5,7 @@ namespace ExemploCrud\Services;
 use Exception;
 use ExemploCrud\Database\ConnectDB;
 use ExemploCrud\Models\Produto;
+use ExemploCrud\Utils\Utils;
 use PDO;
 use Throwable;
 
@@ -34,8 +35,9 @@ final class ProdutoServico
       $query = $this->connect->prepare($sql);
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Throwable $err) {
-      throw new Exception("Erro ao listar produtos: " . $err->getMessage());
+    } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao listar produtos.");
     }
   }
 
@@ -54,7 +56,8 @@ final class ProdutoServico
 
       $query->execute();
     } catch (Throwable $erro) {
-      throw new Exception("Erro ao cadastrar produto: " . $erro->getMessage());
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao cadastrar produto.");
     }
   }
 
@@ -69,14 +72,14 @@ final class ProdutoServico
       $query->execute();
 
       return $query->fetch(PDO::FETCH_ASSOC);
-    } catch (Exception $erro) {
-      die("Erro ao cadastrar produto: " . $erro->getMessage());
+    } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao cadastrar produto.");
     }
   }
 
   public function atualizar(Produto $produto): void
   {
-
     $sql = "UPDATE produtos SET nome = :nome, preco = :preco, quantidade = :quantidade, fabricante_id = :fabricante_id, descricao = :descricao WHERE id = :id";
 
     try {
@@ -89,7 +92,8 @@ final class ProdutoServico
       $query->bindValue(":id", $produto->getId(), PDO::PARAM_INT);
       $query->execute();
     } catch (Throwable $erro) {
-      throw new Exception("Erro ao atualizar produto: " . $erro->getMessage());
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao atualizar produto.");
     }
   }
 
@@ -102,7 +106,8 @@ final class ProdutoServico
       $consulta->bindValue(":id", $id, PDO::PARAM_INT);
       $consulta->execute();
     } catch (Throwable $erro) {
-      throw new Exception("Erro ao excluir produto: " . $erro->getMessage());
+      Utils::registrarLog($erro);
+      throw new Exception("Erro ao excluir produto.");
     }
   }
 }

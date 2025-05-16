@@ -40,6 +40,7 @@ final class FabricanteServico
       $query->bindValue(":nome", $fabricante->getNome(), PDO::PARAM_STR);
       $query->execute();
     } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
       throw new Exception("Erro ao cadastrar fabricante: " . $erro->getMessage());
     }
   }
@@ -58,6 +59,7 @@ final class FabricanteServico
 
       return $result ? $result : null;
     } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
       throw new Exception("Erro ao carregar fabricante: " . $erro->getMessage());
     }
   }
@@ -72,6 +74,7 @@ final class FabricanteServico
 
       $query->execute();
     } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
       throw new Exception("Erro ao atualizar nome do fabricante: " . $erro->getMessage());
     }
   }
@@ -86,6 +89,7 @@ final class FabricanteServico
 
       $query->execute();
     } catch (Throwable $erro) {
+      Utils::registrarLog($erro);
       throw new Exception("Erro ao excluir fabricante: " . $erro->getMessage());
     }
   }
